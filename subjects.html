@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O-Level Study Dashboard</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }h1, h2, h3 {
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.subject {
+  width: 90%;
+  margin: 10px;
+  background-color: #333;
+  border-radius: 10px;
+  padding: 15px;
+  transition: 0.3s;
+}
+
+.subject h2 {
+  cursor: pointer;
+}
+
+.chapters {
+  display: none;
+  margin-top: 10px;
+}
+
+.chapter {
+  background-color: #555;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chapter label {
+  display: flex;
+  align-items: center;
+}
+
+.progress-bar {
+  margin-top: 10px;
+  height: 20px;
+  background-color: #444;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #0f0;
+  width: 0%;
+  transition: width 0.3s;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>O-Level Study Dashboard</h1><div class="subject" data-subject="chemistry">
+  <h2 onclick="toggleChapters('chemistry')">Chemistry</h2>
+  <div class="chapters" id="chemistry">
+<div class="chapter">
+  <label>
+    <input type="checkbox" onchange="updateProgress('chemistry')"> 
+    <span onclick="togglePdf('statesPdf')" style="cursor:pointer;">States of Matter</span>
+  </label>
+</div>
+<div class="chapter" id="statesPdf" style="display:none; padding:0;">
+  <iframe 
+    src="https://yourusername.github.io/yourrepo/StateOfMatter.pdf" 
+    width="100%" 
+    height="600px" 
+    style="border:none; border-radius:8px; margin-top:10px;">
+  </iframe>
+</div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('chemistry')"> Atomic Structure</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('chemistry')"> Bonding</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('chemistry')"> Periodic Table</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('chemistry')"> Energetics</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('chemistry')"> Rates of Reaction</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('chemistry')"> Acids, Bases and Salts</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('chemistry')"> Electrolysis</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('chemistry')"> Moles</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('chemistry')"> Chemical Analysis</label></div>
+    <div class="progress-bar"><div class="progress" id="progress-chemistry"></div></div>
+  </div>
+</div>
+
+<div class="subject" data-subject="physics">
+  <h2 onclick="toggleChapters('physics')">Physics</h2>
+  <div class="chapters" id="physics">
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('physics')"> Physical Quantities</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('physics')"> Kinematics</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('physics')"> Forces and Pressure</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('physics')"> Work, Energy, Power</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('physics')"> Thermal Physics</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('physics')"> Waves</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('physics')"> Light</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('physics')"> Electricity</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('physics')"> Magnetism & Electromagnetism</label></div>
+    <div class="progress-bar"><div class="progress" id="progress-physics"></div></div>
+  </div>
+</div>
+
+<div class="subject" data-subject="computerscience">
+  <h2 onclick="toggleChapters('computerscience')">Computer Science</h2>
+  <div class="chapters" id="computerscience">
+    <h3>Paper 1</h3>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('computerscience')"> Data Representation</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('computerscience')"> Hardware & Software</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('computerscience')"> Logic Gates</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('computerscience')"> Security</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('computerscience')"> Internet & Communication</label></div>
+    <h3>Paper 2</h3>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('computerscience')"> Pseudocode Basics</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('computerscience')"> Control Structures</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('computerscience')"> Procedures & Functions</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('computerscience')"> File Handling</label></div>
+    <div class="progress-bar"><div class="progress" id="progress-computerscience"></div></div>
+  </div>
+</div>
+
+<div class="subject" data-subject="envmanagement">
+  <h2 onclick="toggleChapters('envmanagement')">Environmental Management</h2>
+  <div class="chapters" id="envmanagement">
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('envmanagement')"> Rocks & Minerals</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('envmanagement')"> The Atmosphere</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('envmanagement')"> The Biosphere</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('envmanagement')"> Water Resources</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('envmanagement')"> Agriculture</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('envmanagement')"> Energy Resources</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('envmanagement')"> Pollution</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('envmanagement')"> Population & Urbanisation</label></div>
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('envmanagement')"> Managing Resources</label></div>
+    <div class="progress-bar"><div class="progress" id="progress-envmanagement"></div></div>
+  </div>
+</div>
+
+<div class="subject" data-subject="pakstudies">
+  <h2 onclick="toggleChapters('pakstudies')">Pakistan Studies</h2>
+  <div class="chapters" id="pakstudies">
+    <div class="chapter"><label><input type="checkbox" onchange="updateProgress('pakstudies')"> Compiled Notes</label></div>
+    <div class="progress-bar"><div class="progress" id="progress-pakstudies"></div></div>
+  </div>
+</div>
+
+  </div>  <script>
+    function toggleChapters(id) {
+      const section = document.getElementById(id);
+      section.style.display = section.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function updateProgress(subject) {
+      const subjectDiv = document.querySelector(`[data-subject="${subject}"]`);
+      const checkboxes = subjectDiv.querySelectorAll('input[type="checkbox"]');
+      const checked = subjectDiv.querySelectorAll('input[type="checkbox"]:checked');
+      const progress = Math.floor((checked.length / checkboxes.length) * 100);
+      const progressBar = document.getElementById(`progress-${subject}`);
+      progressBar.style.width = `${progress}%`;
+    }
+  </script></body>
+</html>
