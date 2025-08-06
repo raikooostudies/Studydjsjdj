@@ -34,13 +34,32 @@
       margin-left: 240px;
       padding: 20px;
     }
-    .avatar {
+    .avatar-container {
       position: absolute;
       top: 10px;
       right: 20px;
+    }
+    .avatar {
       background-color: #333;
       padding: 10px 15px;
       border-radius: 25px;
+      cursor: pointer;
+    }
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      margin-top: 10px;
+      background-color: #222;
+      padding: 10px;
+      border-radius: 10px;
+      width: 200px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    .dropdown p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #ccc;
     }
     .section {
       margin: 30px 0;
@@ -60,6 +79,7 @@
       padding: 5px 10px;
       border-radius: 5px;
       margin-left: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -71,8 +91,14 @@
     <a href="subjects.html">Subjects</a>
   </div>
 
-  <!-- Avatar (top right) -->
-  <div class="avatar" id="userInfo">User</div>
+  <!-- Avatar and Dropdown -->
+  <div class="avatar-container">
+    <div class="avatar" onclick="toggleDropdown()" id="avatarName">User</div>
+    <div class="dropdown" id="userDropdown">
+      <p id="dropdownName">Name: Guest</p>
+      <p id="dropdownEmail">Email: unknown</p>
+    </div>
+  </div>
 
   <!-- Main content -->
   <div class="main">
@@ -109,7 +135,16 @@
   <script>
     // Load user info from localStorage
     const name = localStorage.getItem("userName") || "Guest";
-    document.getElementById("userInfo").innerText = name;
+    const email = localStorage.getItem("userEmail") || "unknown";
+    document.getElementById("avatarName").innerText = name;
+    document.getElementById("dropdownName").innerText = "Name: " + name;
+    document.getElementById("dropdownEmail").innerText = "Email: " + email;
+
+    // Toggle avatar dropdown
+    function toggleDropdown() {
+      const dropdown = document.getElementById("userDropdown");
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    }
 
     // Motivational Quotes Rotator
     const quotes = [
