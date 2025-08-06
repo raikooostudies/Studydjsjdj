@@ -1,217 +1,164 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #fff;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #111;
-      padding: 10px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .nav-links a {
+      background-color: black;
       color: white;
-      margin: 0 10px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .avatar-container {
-      position: relative;
-      cursor: pointer;
-    }
-    .avatar {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      background-color: grey;
-      display: inline-block;
-    }
-    .dropdown {
-      display: none;
-      position: absolute;
-      right: 0;
-      background-color: #222;
-      border: 1px solid #444;
-      padding: 10px;
-      border-radius: 8px;
-      min-width: 180px;
-    }
-    .dropdown p, .dropdown button {
-      color: #fff;
-      margin: 5px 0;
-      font-size: 14px;
-    }
-    .dropdown button {
-      background-color: #444;
-      border: none;
-      padding: 6px 10px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    .avatar-container:hover .dropdown {
-      display: block;
-    }
+    }.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 30px;
+}
 
-    main {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
+.box {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
 
-    section {
-      background-color: #222;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #111;
-    }
+h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
 
-    h2 {
-      border-bottom: 1px solid #444;
-      padding-bottom: 8px;
-      margin-bottom: 15px;
-      color: #eee;
-    }
+.motivational {
+  height: 50px;
+  font-style: italic;
+  text-align: center;
+}
 
-    /* Pomodoro */
-    .timer-controls {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
+.todo-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
 
-    button {
-      padding: 8px 12px;
-      background-color: #444;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+.todo-list button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
 
-    input[type="number"] {
-      width: 60px;
-      padding: 5px;
-      background-color: #111;
-      border: 1px solid #555;
-      color: white;
-      border-radius: 5px;
-    }
+textarea {
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+}
 
-    /* Sticky Notes */
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    ul li {
-      background-color: #333;
-      margin: 5px 0;
-      padding: 10px;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.timer-controls button {
+  margin: 5px;
+  padding: 10px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-    /* Motivational quotes */
-    #quote {
-      font-style: italic;
-      color: #ccc;
-    }
+.user-profile {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #444;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
 
   </style>
-</head>
-<body>
-
-  <header>
-    <div class="nav-links">
-      <a href="index.html">Login</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="subjects.html">Subjects</a>
+</head><body>
+  <div class="user-profile" onclick="toggleProfileInfo()">
+    👤 User
+    <div id="profile-info" style="display:none;">
+      <p>Name: <span id="username">Guest</span></p>
+      <p>Email: <span id="useremail">guest@example.com</span></p>
+      <button onclick="logout()">Logout</button>
     </div>
-    <div class="avatar-container">
-      <div class="avatar"></div>
-      <div class="dropdown">
-        <p><strong>Name:</strong> <span id="userName">Loading...</span></p>
-        <p><strong>Email:</strong> <span id="userEmail">Loading...</span></p>
-        <button onclick="logout()">Logout</button>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <!-- Pomodoro Timer -->
-    <section>
-      <h2>Pomodoro Timer</h2>
-      <p><strong>Time Left:</strong> <span id="timer">25:00</span></p>
-      <div class="timer-controls">
-        <button onclick="startTimer()">Start</button>
-        <button onclick="pauseTimer()">Pause</button>
-        <button onclick="resetTimer()">Reset</button>
-      </div>
-      <div class="timer-controls">
-        <label>Work: <input type="number" id="workTime" value="25"></label>
-        <label>Break: <input type="number" id="breakTime" value="5"></label>
-      </div>
-    </section>
-
-    <!-- Sticky Notes / To-Do -->
-    <section>
-      <h2>Sticky Notes</h2>
-      <input type="text" id="taskInput" placeholder="Enter a task" />
-      <button onclick="addTask()">Add</button>
-      <ul id="taskList"></ul>
-    </section>
-
-    <!-- Motivational Quotes -->
-    <section>
+  </div>  <div class="container">
+    <div class="box motivational">
       <h2>Motivational Quote</h2>
-      <p id="quote">Stay focused and never give up!</p>
-    </section>
-  </main>
+      <p id="quote">Stay positive and keep pushing!</p>
+    </div><div class="box">
+  <h2>Pomodoro Timer</h2>
+  <div>
+    <p id="timer">25:00</p>
+    <div class="timer-controls">
+      <button onclick="startTimer()">Start</button>
+      <button onclick="pauseTimer()">Pause</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+</div>
 
-  <script>
+<div class="box">
+  <h2>To-Do List</h2>
+  <input type="text" id="todo-input" placeholder="Add task" />
+  <button onclick="addTodo()">Add</button>
+  <ul class="todo-list" id="todo-list"></ul>
+</div>
+
+<div class="box">
+  <h2>Sticky Notes</h2>
+  <textarea id="sticky-note" placeholder="Write something..."></textarea>
+  <button onclick="saveNote()">Save</button>
+</div>
+
+  </div>  <script>
+    const quotes = [
+      "Believe in yourself.",
+      "You are capable of amazing things.",
+      "Push harder than yesterday.",
+      "Success is not final, failure is not fatal.",
+      "Your only limit is your mind.",
+      "Stay focused and never give up."
+    ];
+
+    let quoteIndex = 0;
+    function rotateQuote() {
+      quoteIndex = (quoteIndex + 1) % quotes.length;
+      document.getElementById("quote").innerText = quotes[quoteIndex];
+    }
+    setInterval(rotateQuote, 30000);
+
     // Pomodoro Timer
     let timer;
+    let seconds = 1500;
     let isRunning = false;
-    let isWork = true;
-    let timeLeft = 25 * 60;
 
     function updateTimerDisplay() {
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      document.getElementById("timer").textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      let mins = Math.floor(seconds / 60);
+      let secs = seconds % 60;
+      document.getElementById("timer").innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
 
     function startTimer() {
-      if (isRunning) return;
-      isRunning = true;
-      timer = setInterval(() => {
-        timeLeft--;
-        updateTimerDisplay();
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          isWork = !isWork;
-          const newTime = isWork
-            ? parseInt(document.getElementById("workTime").value) * 60
-            : parseInt(document.getElementById("breakTime").value) * 60;
-          timeLeft = newTime;
-          isRunning = false;
-          startTimer();
-        }
-      }, 1000);
+      if (!isRunning) {
+        timer = setInterval(() => {
+          if (seconds > 0) {
+            seconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timer);
+            isRunning = false;
+            alert("Time's up!");
+          }
+        }, 1000);
+        isRunning = true;
+      }
     }
 
     function pauseTimer() {
@@ -220,58 +167,53 @@
     }
 
     function resetTimer() {
-      pauseTimer();
-      timeLeft = parseInt(document.getElementById("workTime").value) * 60;
-      isWork = true;
+      clearInterval(timer);
+      seconds = 1500;
+      isRunning = false;
       updateTimerDisplay();
     }
-
     updateTimerDisplay();
 
+    // To-Do List
+    function addTodo() {
+      const input = document.getElementById("todo-input");
+      const task = input.value.trim();
+      if (task) {
+        const li = document.createElement("li");
+        li.innerHTML = `${task} <button onclick="this.parentElement.remove()">❌</button>`;
+        document.getElementById("todo-list").appendChild(li);
+        input.value = "";
+      }
+    }
+
     // Sticky Notes
-    function addTask() {
-      const input = document.getElementById("taskInput");
-      const taskText = input.value.trim();
-      if (taskText === "") return;
-      const li = document.createElement("li");
-      li.textContent = taskText;
-      const removeBtn = document.createElement("button");
-      removeBtn.textContent = "❌";
-      removeBtn.onclick = () => li.remove();
-      li.appendChild(removeBtn);
-      document.getElementById("taskList").appendChild(li);
-      input.value = "";
+    function saveNote() {
+      const note = document.getElementById("sticky-note").value;
+      localStorage.setItem("stickyNote", note);
     }
 
-    // Motivational Quotes
-    const quotes = [
-      "Push yourself, because no one else will.",
-      "Believe in yourself and all that you are.",
-      "Success doesn't come to you. You go to it.",
-      "You are capable of amazing things.",
-      "Stay focused and never give up.",
-      "Discipline is doing it even when you don't feel like it."
-    ];
+    window.onload = function () {
+      const savedNote = localStorage.getItem("stickyNote");
+      if (savedNote) {
+        document.getElementById("sticky-note").value = savedNote;
+      }
 
-    function rotateQuote() {
-      const quoteBox = document.getElementById("quote");
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      quoteBox.textContent = quotes[randomIndex];
+      const storedName = localStorage.getItem("username");
+      const storedEmail = localStorage.getItem("useremail");
+      if (storedName && storedEmail) {
+        document.getElementById("username").innerText = storedName;
+        document.getElementById("useremail").innerText = storedEmail;
+      }
+    };
+
+    function toggleProfileInfo() {
+      const profile = document.getElementById("profile-info");
+      profile.style.display = profile.style.display === "none" ? "block" : "none";
     }
-
-    setInterval(rotateQuote, 30000); // every 30 seconds
-    rotateQuote();
-
-    // User Info Display
-    const storedName = localStorage.getItem("userName") || "Guest";
-    const storedEmail = localStorage.getItem("userEmail") || "guest@example.com";
-    document.getElementById("userName").textContent = storedName;
-    document.getElementById("userEmail").textContent = storedEmail;
 
     function logout() {
-      localStorage.clear();
-      window.location.href = "index.html";
+      localStorage.removeItem("username");
+      localStorage.removeItem("useremail");
+      location.href = "index.html";
     }
-  </script>
-</body>
-</html>
+  </script></body></html>
