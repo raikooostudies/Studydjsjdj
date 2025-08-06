@@ -106,10 +106,10 @@
       const sound = document.getElementById('clickSound');
       sound.play();
 
+      // Wait for sound to finish, then redirect
       setTimeout(() => {
-        // Redirect after sound finishes playing (0.6s delay)
         window.location.href = "dashboard.html";
-      }, 600);
+      }, 500); // delay in milliseconds
     }
   </script>
 </body>
