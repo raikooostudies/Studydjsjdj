@@ -103,13 +103,22 @@
   <script>
     function login(event) {
       event.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
       const sound = document.getElementById('clickSound');
+
+      // Save to localStorage
+      localStorage.setItem('studyUserName', username);
+      localStorage.setItem('studyUserEmail', email);
+
+      // Play click sound
       sound.play();
 
-      // Wait for sound to finish, then redirect
+      // Redirect after delay
       setTimeout(() => {
         window.location.href = "dashboard.html";
-      }, 500); // delay in milliseconds
+      }, 500);
     }
   </script>
 </body>
