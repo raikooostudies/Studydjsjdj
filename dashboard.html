@@ -3,162 +3,161 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Study Dashboard</title>
+  <title>Dashboard</title>
   <style>
     body {
-      background-color: #121212;
-      color: white;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
     }
-    .container {
-      max-width: 600px;
-      margin: 20px auto;
+    .sidebar {
+      width: 220px;
+      height: 100vh;
+      background-color: #1c1c1c;
+      position: fixed;
+      padding-top: 20px;
+    }
+    .sidebar a {
+      display: block;
+      padding: 15px;
+      color: #fff;
+      text-decoration: none;
+      margin: 10px;
+      border-radius: 10px;
+      background-color: #333;
+    }
+    .sidebar a:hover {
+      background-color: #555;
+    }
+    .main {
+      margin-left: 240px;
       padding: 20px;
     }
-    h1, h2 {
-      text-align: center;
+    .avatar {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      background-color: #333;
+      padding: 10px 15px;
+      border-radius: 25px;
     }
     .section {
-      background: #1e1e1e;
-      margin: 20px 0;
-      padding: 15px;
-      border-radius: 8px;
+      margin: 30px 0;
+      padding: 20px;
+      background-color: #222;
+      border-radius: 15px;
     }
-    input, button, textarea, select {
-      background-color: #2c2c2c;
-      color: white;
-      border: none;
-      padding: 10px;
-      margin-top: 5px;
-      width: 100%;
-      box-sizing: border-box;
-      border-radius: 5px;
-    }
-    button {
-      cursor: pointer;
-    }
-    .task-item {
+    .todo-item {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      padding: 8px;
-      background: #333;
-      border-radius: 4px;
+      margin-top: 5px;
     }
-    .close {
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .sticky-note {
-      width: 100%;
-      height: 100px;
-    }
-    .nav-link {
-      display: block;
-      text-align: center;
-      margin-top: 20px;
-      color: #4caf50;
-      text-decoration: none;
-      font-weight: bold;
+    button {
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin-left: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome back, User!</h1>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="index.html">Login</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="subjects.html">Subjects</a>
+  </div>
 
+  <!-- Avatar (top right) -->
+  <div class="avatar" id="userInfo">User</div>
+
+  <!-- Main content -->
+  <div class="main">
+    <!-- Motivational Quotes -->
     <div class="section">
-      <h2>Pomodoro Timer</h2>
-      <label>Work Duration (minutes): <input type="number" id="workTime" value="25"></label>
-      <label>Break Duration (minutes): <input type="number" id="breakTime" value="5"></label>
-      <button onclick="startPomodoro()">Start</button>
-      <h3 id="timerDisplay">25:00</h3>
-      <p id="pomodoroStatus">Work session</p>
+      <h2>Motivational Quote</h2>
+      <p id="quote">Stay focused. You can do this!</p>
     </div>
 
+    <!-- Pomodoro Timer -->
+    <div class="section">
+      <h2>Pomodoro Timer</h2>
+      Focus: <input type="number" id="focusTime" value="25" min="1"/> mins
+      Break: <input type="number" id="breakTime" value="5" min="1"/> mins
+      <button onclick="startPomodoro()">Start</button>
+      <p id="timer">00:00</p>
+    </div>
+
+    <!-- To-do List -->
     <div class="section">
       <h2>To-Do List</h2>
-      <input type="text" id="taskInput" placeholder="Enter new task">
-      <button onclick="addTask()">Add Task</button>
+      <input type="text" id="taskInput" placeholder="Add a task"/>
+      <button onclick="addTask()">Add</button>
       <div id="taskList"></div>
     </div>
 
+    <!-- Sticky Notes -->
     <div class="section">
       <h2>Sticky Notes</h2>
-      <textarea class="sticky-note" placeholder="Write your notes here..."></textarea>
+      <textarea id="stickyNote" rows="5" style="width:100%; background:#333; color:white;"></textarea>
     </div>
-
-    <div class="section">
-      <h2>Motivational Quote</h2>
-      <p id="quoteDisplay">"Push yourself, because no one else is going to do it for you."</p>
-    </div>
-
-    <a href="subjects.html" class="nav-link">→ Go to Subjects</a>
   </div>
 
   <script>
-    // Pomodoro Logic
-    let timer;
-    let isBreak = false;
-    let remainingSeconds;
+    // Load user info from localStorage
+    const name = localStorage.getItem("userName") || "Guest";
+    document.getElementById("userInfo").innerText = name;
 
-    function startPomodoro() {
-      clearInterval(timer);
-
-      const workMinutes = parseInt(document.getElementById("workTime").value);
-      const breakMinutes = parseInt(document.getElementById("breakTime").value);
-      remainingSeconds = (isBreak ? breakMinutes : workMinutes) * 60;
-
-      document.getElementById("pomodoroStatus").textContent = isBreak ? "Break session" : "Work session";
-
-      timer = setInterval(() => {
-        if (remainingSeconds <= 0) {
-          clearInterval(timer);
-          isBreak = !isBreak;
-          alert(isBreak ? "Break time!" : "Back to work!");
-          startPomodoro();
-        } else {
-          remainingSeconds--;
-          const mins = Math.floor(remainingSeconds / 60);
-          const secs = remainingSeconds % 60;
-          document.getElementById("timerDisplay").textContent = 
-            `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-      }, 1000);
-    }
-
-    // To-Do List
-    function addTask() {
-      const input = document.getElementById("taskInput");
-      if (!input.value.trim()) return;
-
-      const taskItem = document.createElement("div");
-      taskItem.className = "task-item";
-      taskItem.innerHTML = `
-        <span>${input.value}</span>
-        <span class="close" onclick="this.parentElement.remove()">×</span>
-      `;
-      document.getElementById("taskList").appendChild(taskItem);
-      input.value = "";
-    }
-
-    // Motivational Quotes
+    // Motivational Quotes Rotator
     const quotes = [
-      "Push yourself, because no one else is going to do it for you.",
-      "Success doesn’t just find you. You have to go out and get it.",
-      "The harder you work for something, the greater you’ll feel when you achieve it.",
-      "Dream it. Wish it. Do it.",
-      "Great things never come from comfort zones.",
-      "Discipline is doing it even when you don’t feel like it."
+      "Stay focused. You can do this!",
+      "Discipline beats motivation.",
+      "Every effort counts!",
+      "You're closer than you think.",
+      "Consistency > Intensity.",
+      "One step at a time."
     ];
     let quoteIndex = 0;
     setInterval(() => {
       quoteIndex = (quoteIndex + 1) % quotes.length;
-      document.getElementById("quoteDisplay").textContent = quotes[quoteIndex];
+      document.getElementById("quote").innerText = quotes[quoteIndex];
     }, 30000);
+
+    // Pomodoro Timer
+    let timerInterval;
+    function startPomodoro() {
+      clearInterval(timerInterval);
+      let focus = parseInt(document.getElementById("focusTime").value) * 60;
+      let breakTime = parseInt(document.getElementById("breakTime").value) * 60;
+      let isFocus = true;
+      let timeLeft = focus;
+      timerInterval = setInterval(() => {
+        const min = Math.floor(timeLeft / 60);
+        const sec = timeLeft % 60;
+        document.getElementById("timer").innerText = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        timeLeft--;
+        if (timeLeft < 0) {
+          isFocus = !isFocus;
+          timeLeft = isFocus ? focus : breakTime;
+        }
+      }, 1000);
+    }
+
+    // To-do list logic
+    function addTask() {
+      const taskInput = document.getElementById("taskInput");
+      const taskText = taskInput.value.trim();
+      if (taskText === "") return;
+      const taskList = document.getElementById("taskList");
+      const taskItem = document.createElement("div");
+      taskItem.className = "todo-item";
+      taskItem.innerHTML = `<span>${taskText}</span><button onclick="this.parentElement.remove()">X</button>`;
+      taskList.appendChild(taskItem);
+      taskInput.value = "";
+    }
   </script>
 </body>
 </html>
