@@ -11,216 +11,266 @@
       background-color: #000;
       color: #fff;
     }
-    .sidebar {
-      width: 220px;
-      height: 100vh;
-      background-color: #1c1c1c;
-      position: fixed;
-      padding-top: 20px;
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #111;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
-    .sidebar a {
-      display: block;
-      padding: 15px;
-      color: #fff;
+    .nav-links a {
+      color: white;
+      margin: 0 10px;
       text-decoration: none;
-      margin: 10px;
-      border-radius: 10px;
-      background-color: #333;
-    }
-    .sidebar a:hover {
-      background-color: #555;
-    }
-    .main {
-      margin-left: 240px;
-      padding: 20px;
+      font-weight: bold;
     }
     .avatar-container {
-      position: absolute;
-      top: 10px;
-      right: 20px;
+      position: relative;
+      cursor: pointer;
     }
     .avatar {
-      background-color: #333;
-      padding: 10px 15px;
-      border-radius: 25px;
-      cursor: pointer;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: grey;
+      display: inline-block;
     }
     .dropdown {
       display: none;
       position: absolute;
       right: 0;
-      margin-top: 10px;
       background-color: #222;
+      border: 1px solid #444;
       padding: 10px;
-      border-radius: 10px;
-      width: 200px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      min-width: 180px;
     }
-    .dropdown p {
+    .dropdown p, .dropdown button {
+      color: #fff;
       margin: 5px 0;
       font-size: 14px;
-      color: #ccc;
     }
     .dropdown button {
-      width: 100%;
+      background-color: #444;
+      border: none;
+      padding: 6px 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .avatar-container:hover .dropdown {
+      display: block;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    section {
+      background-color: #222;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #111;
+    }
+
+    h2 {
+      border-bottom: 1px solid #444;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      color: #eee;
+    }
+
+    /* Pomodoro */
+    .timer-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 8px 12px;
       background-color: #444;
       color: white;
       border: none;
-      padding: 8px;
       border-radius: 5px;
-      margin-top: 10px;
       cursor: pointer;
     }
-    .dropdown button:hover {
-      background-color: #666;
+
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      background-color: #111;
+      border: 1px solid #555;
+      color: white;
+      border-radius: 5px;
     }
-    .section {
-      margin: 30px 0;
-      padding: 20px;
-      background-color: #222;
-      border-radius: 15px;
+
+    /* Sticky Notes */
+    ul {
+      list-style: none;
+      padding: 0;
     }
-    .todo-item {
+    ul li {
+      background-color: #333;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 6px;
       display: flex;
       justify-content: space-between;
-      margin-top: 5px;
+      align-items: center;
     }
-    input[type="text"],
-    input[type="number"],
-    textarea {
-      background-color: #333;
-      color: white;
-      border: none;
-      padding: 8px;
-      border-radius: 5px;
+
+    /* Motivational quotes */
+    #quote {
+      font-style: italic;
+      color: #ccc;
     }
-    button {
-      background-color: #444;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      margin-left: 10px;
-      cursor: pointer;
-    }
+
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <a href="index.html">Login</a>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="subjects.html">Subjects</a>
-  </div>
 
-  <!-- Avatar and Dropdown -->
-  <div class="avatar-container">
-    <div class="avatar" onclick="toggleDropdown()" id="avatarName">User</div>
-    <div class="dropdown" id="userDropdown">
-      <p id="dropdownName">Name: Guest</p>
-      <p id="dropdownEmail">Email: unknown</p>
-      <button onclick="logout()">Logout</button>
+  <header>
+    <div class="nav-links">
+      <a href="index.html">Login</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="subjects.html">Subjects</a>
     </div>
-  </div>
-
-  <!-- Main content -->
-  <div class="main">
-    <!-- Motivational Quotes -->
-    <div class="section">
-      <h2>Motivational Quote</h2>
-      <p id="quote">Stay focused. You can do this!</p>
+    <div class="avatar-container">
+      <div class="avatar"></div>
+      <div class="dropdown">
+        <p><strong>Name:</strong> <span id="userName">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="userEmail">Loading...</span></p>
+        <button onclick="logout()">Logout</button>
+      </div>
     </div>
+  </header>
 
+  <main>
     <!-- Pomodoro Timer -->
-    <div class="section">
+    <section>
       <h2>Pomodoro Timer</h2>
-      Focus: <input type="number" id="focusTime" value="25" min="1"/> mins
-      Break: <input type="number" id="breakTime" value="5" min="1"/> mins
-      <button onclick="startPomodoro()">Start</button>
-      <p id="timer">00:00</p>
-    </div>
+      <p><strong>Time Left:</strong> <span id="timer">25:00</span></p>
+      <div class="timer-controls">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="pauseTimer()">Pause</button>
+        <button onclick="resetTimer()">Reset</button>
+      </div>
+      <div class="timer-controls">
+        <label>Work: <input type="number" id="workTime" value="25"></label>
+        <label>Break: <input type="number" id="breakTime" value="5"></label>
+      </div>
+    </section>
 
-    <!-- To-do List -->
-    <div class="section">
-      <h2>To-Do List</h2>
-      <input type="text" id="taskInput" placeholder="Add a task"/>
-      <button onclick="addTask()">Add</button>
-      <div id="taskList"></div>
-    </div>
-
-    <!-- Sticky Notes -->
-    <div class="section">
+    <!-- Sticky Notes / To-Do -->
+    <section>
       <h2>Sticky Notes</h2>
-      <textarea id="stickyNote" rows="5" style="width:100%;"></textarea>
-    </div>
-  </div>
+      <input type="text" id="taskInput" placeholder="Enter a task" />
+      <button onclick="addTask()">Add</button>
+      <ul id="taskList"></ul>
+    </section>
+
+    <!-- Motivational Quotes -->
+    <section>
+      <h2>Motivational Quote</h2>
+      <p id="quote">Stay focused and never give up!</p>
+    </section>
+  </main>
 
   <script>
-    // Load user info from localStorage
-    const name = localStorage.getItem("userName") || "Guest";
-    const email = localStorage.getItem("userEmail") || "unknown";
-    document.getElementById("avatarName").innerText = name;
-    document.getElementById("dropdownName").innerText = "Name: " + name;
-    document.getElementById("dropdownEmail").innerText = "Email: " + email;
-
-    // Toggle avatar dropdown
-    function toggleDropdown() {
-      const dropdown = document.getElementById("userDropdown");
-      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-    }
-
-    // Logout function
-    function logout() {
-      localStorage.clear();
-      window.location.href = "index.html";
-    }
-
-    // Motivational Quotes Rotator
-    const quotes = [
-      "Stay focused. You can do this!",
-      "Discipline beats motivation.",
-      "Every effort counts!",
-      "You're closer than you think.",
-      "Consistency > Intensity.",
-      "One step at a time."
-    ];
-    let quoteIndex = 0;
-    setInterval(() => {
-      quoteIndex = (quoteIndex + 1) % quotes.length;
-      document.getElementById("quote").innerText = quotes[quoteIndex];
-    }, 30000);
-
     // Pomodoro Timer
-    let timerInterval;
-    function startPomodoro() {
-      clearInterval(timerInterval);
-      let focus = parseInt(document.getElementById("focusTime").value) * 60;
-      let breakTime = parseInt(document.getElementById("breakTime").value) * 60;
-      let isFocus = true;
-      let timeLeft = focus;
-      timerInterval = setInterval(() => {
-        const min = Math.floor(timeLeft / 60);
-        const sec = timeLeft % 60;
-        document.getElementById("timer").innerText = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+    let timer;
+    let isRunning = false;
+    let isWork = true;
+    let timeLeft = 25 * 60;
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      document.getElementById("timer").textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (isRunning) return;
+      isRunning = true;
+      timer = setInterval(() => {
         timeLeft--;
-        if (timeLeft < 0) {
-          isFocus = !isFocus;
-          timeLeft = isFocus ? focus : breakTime;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          isWork = !isWork;
+          const newTime = isWork
+            ? parseInt(document.getElementById("workTime").value) * 60
+            : parseInt(document.getElementById("breakTime").value) * 60;
+          timeLeft = newTime;
+          isRunning = false;
+          startTimer();
         }
       }, 1000);
     }
 
-    // To-do list logic
+    function pauseTimer() {
+      clearInterval(timer);
+      isRunning = false;
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      timeLeft = parseInt(document.getElementById("workTime").value) * 60;
+      isWork = true;
+      updateTimerDisplay();
+    }
+
+    updateTimerDisplay();
+
+    // Sticky Notes
     function addTask() {
-      const taskInput = document.getElementById("taskInput");
-      const taskText = taskInput.value.trim();
+      const input = document.getElementById("taskInput");
+      const taskText = input.value.trim();
       if (taskText === "") return;
-      const taskList = document.getElementById("taskList");
-      const taskItem = document.createElement("div");
-      taskItem.className = "todo-item";
-      taskItem.innerHTML = `<span>${taskText}</span><button onclick="this.parentElement.remove()">X</button>`;
-      taskList.appendChild(taskItem);
-      taskInput.value = "";
+      const li = document.createElement("li");
+      li.textContent = taskText;
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "❌";
+      removeBtn.onclick = () => li.remove();
+      li.appendChild(removeBtn);
+      document.getElementById("taskList").appendChild(li);
+      input.value = "";
+    }
+
+    // Motivational Quotes
+    const quotes = [
+      "Push yourself, because no one else will.",
+      "Believe in yourself and all that you are.",
+      "Success doesn't come to you. You go to it.",
+      "You are capable of amazing things.",
+      "Stay focused and never give up.",
+      "Discipline is doing it even when you don't feel like it."
+    ];
+
+    function rotateQuote() {
+      const quoteBox = document.getElementById("quote");
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      quoteBox.textContent = quotes[randomIndex];
+    }
+
+    setInterval(rotateQuote, 30000); // every 30 seconds
+    rotateQuote();
+
+    // User Info Display
+    const storedName = localStorage.getItem("userName") || "Guest";
+    const storedEmail = localStorage.getItem("userEmail") || "guest@example.com";
+    document.getElementById("userName").textContent = storedName;
+    document.getElementById("userEmail").textContent = storedEmail;
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "index.html";
     }
   </script>
 </body>
