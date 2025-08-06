@@ -61,6 +61,19 @@
       font-size: 14px;
       color: #ccc;
     }
+    .dropdown button {
+      width: 100%;
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .dropdown button:hover {
+      background-color: #666;
+    }
     .section {
       margin: 30px 0;
       padding: 20px;
@@ -71,6 +84,15 @@
       display: flex;
       justify-content: space-between;
       margin-top: 5px;
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 5px;
     }
     button {
       background-color: #444;
@@ -97,6 +119,7 @@
     <div class="dropdown" id="userDropdown">
       <p id="dropdownName">Name: Guest</p>
       <p id="dropdownEmail">Email: unknown</p>
+      <button onclick="logout()">Logout</button>
     </div>
   </div>
 
@@ -128,7 +151,7 @@
     <!-- Sticky Notes -->
     <div class="section">
       <h2>Sticky Notes</h2>
-      <textarea id="stickyNote" rows="5" style="width:100%; background:#333; color:white;"></textarea>
+      <textarea id="stickyNote" rows="5" style="width:100%;"></textarea>
     </div>
   </div>
 
@@ -144,6 +167,12 @@
     function toggleDropdown() {
       const dropdown = document.getElementById("userDropdown");
       dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.clear();
+      window.location.href = "index.html";
     }
 
     // Motivational Quotes Rotator
